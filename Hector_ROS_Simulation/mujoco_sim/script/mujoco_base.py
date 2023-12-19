@@ -39,14 +39,16 @@ class MuJoCoBase():
         glfw.set_scroll_callback(self.window, self.scroll)
 
     def keyboard(self, window, key, scancode, act, mods):
+        # 回退键reset
         if act == glfw.PRESS and key == glfw.KEY_BACKSPACE:
             mj.mj_resetData(self.model, self.data)
             mj.mj_forward(self.model, self.data)
+        # 空格控制pause_flag, 并发布到对应节点
         elif act ==glfw.PRESS and key== glfw.KEY_SPACE:
             self.pause_flag = not self.pause_flag
             mj.mj_forward(self.model, self.data)
             simState = Bool()
-            simState.data = self.pause_flag
+            simState.data = self.pause_flag 
             self.pubSimState.publish(simState)
             
 
@@ -62,7 +64,7 @@ class MuJoCoBase():
         # update mouse position
         glfw.get_cursor_pos(window)
 
-    def mouse_move(self, window, xpos, ypos):
+    def mouse_move(self, window, xpos, ypos): # 通过鼠标调整相机视角
         # compute mouse displacement, save
         dx = xpos - self.lastx
         dy = ypos - self.lasty

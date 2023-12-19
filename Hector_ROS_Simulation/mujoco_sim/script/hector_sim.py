@@ -19,15 +19,16 @@ class HectorSim(MuJoCoBase):
     # print('Actoator controls:', self.data.ctrl)
     # mj.set_mjcb_control(self.controller)
     # * Set subscriber and publisher
-    self.pubJoints = rospy.Publisher('/jointsPosVel', Float32MultiArray, queue_size=10)
-    self.pubPose = rospy.Publisher('/bodyPose', Pose, queue_size=10)
-    self.pubTwist = rospy.Publisher('/bodyTwist', Twist, queue_size=10)
-
+    # 创建发布者用于发布机器人的状态信息
+    self.pubJoints = rospy.Publisher('/jointsPosVel', Float32MultiArray, queue_size=10) # 关节位置和速度
+    self.pubPose = rospy.Publisher('/bodyPose', Pose, queue_size=10) # Pose消息包含pos和ori，pos三维，ori是四元数
+    self.pubTwist = rospy.Publisher('/bodyTwist', Twist, queue_size=10) # Twist消息包含三维线速度和三维角速度
+    # 创建订阅者用于订阅控制器计算的关节力矩，同时执行self.controlCallback回调函数，把控制量传给机器人进行控制
     rospy.Subscriber("/jointsTorque", Float32MultiArray, self.controlCallback) 
     # * show the model
     mj.mj_step(self.model, self.data)
     # enable contact force visualization
-    self.opt.flags[mj.mjtVisFlag.mjVIS_CONTACTFORCE] = True
+    self.opt.flags[mj.mjtVisFlag.mjVIS_CONTACTFORCE] = True # 可视化接触力
 
     # get framebuffer viewport
     viewport_width, viewport_height = glfw.get_framebuffer_size(
@@ -64,13 +65,14 @@ class HectorSim(MuJoCoBase):
         # * Publish joint positions and velocities
         jointsPosVel = Float32MultiArray()
         # get last 10 element of qpos and qvel
-        qp = self.data.qpos[-10:].copy()
+        qp = self.data.qpos[-10:].copy() # 对应10个关节位置
         qv = self.data.qvel[-10:].copy()
-        jointsPosVel.data = np.concatenate((qp,qv))
+        jointsPosVel.data = np.concatenate((qp,qv)) # 合起来发布，让控制器获取
 
         self.pubJoints.publish(jointsPosVel)
         # * Publish body pose
         bodyPose = Pose()
+        # 不是很明白为什么从传感器读取而不是直接读机器人状态信息
         pos = self.data.sensor('BodyPos').data.copy()
         ori = self.data.sensor('BodyQuat').data.copy()
         # pos = self.data.qpos[:3].copy()

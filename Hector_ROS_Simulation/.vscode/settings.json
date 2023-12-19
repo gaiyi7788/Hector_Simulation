@@ -67,5 +67,6 @@
         "typeinfo": "cpp",
         "variant": "cpp",
         "dense": "cpp"
-    }
+    },
+    "cmake.sourceDirectory": "E:/Master2/Hector_Simulation/Hector_ROS_Simulation/hector_control"
 }

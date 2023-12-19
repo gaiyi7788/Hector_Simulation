@@ -10,9 +10,9 @@
         "/opt/ros/noetic/include/**",
         "/opt/openrobots/include/**",
         "/opt/openrobots/include/**",
-        "/home/obot/catkin_ws/src/Hector_Simulation/Hector_ROS_Simulation/hector_control/include/**",
-        "/home/obot/catkin_ws/src/Hector_Simulation/Hector_ROS_Simulation/unitree_ros/unitree_controller/include/**",
-        "/home/obot/catkin_ws/src/Hector_Simulation/Hector_ROS_Simulation/unitree_ros/unitree_legged_control/include/**",
+        "Hector_ROS_Simulation/hector_control/include/**",
+        "Hector_ROS_Simulation/unitree_ros/unitree_controller/include/**",
+        "/Hector_ROS_Simulation/unitree_ros/unitree_legged_control/include/**",
         "/usr/include/**"
       ],
       "name": "ROS",
